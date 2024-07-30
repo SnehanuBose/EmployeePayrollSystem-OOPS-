@@ -5,7 +5,7 @@ public class Main {
 
         PayrollSystem pay =new PayrollSystem();
 
-        FullTimeEmployee e1=new FullTimeEmployee("Snehanu","23042005","gokuui3232@gmail.com",60000.00f,0);
+        FullTimeEmployee e1=new FullTimeEmployee("Raman","23042005","gokuui32@gmail.com",60000.00f,0);
         FullTimeEmployee e2=new FullTimeEmployee("Rohit","23092005","goku@gmail.com",60000.00f,5);
         PartTimeEmployee e3=new PartTimeEmployee("Rahul","23042006","rahul@gmail.com",40,50.00f);
         System.out.println("Setup Done");
