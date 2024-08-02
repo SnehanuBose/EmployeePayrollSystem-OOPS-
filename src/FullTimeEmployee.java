@@ -9,6 +9,12 @@ public class FullTimeEmployee extends Employee{
         this.leavedays=leaves;
     }
 
+    public FullTimeEmployee(){
+        super(null, null, null,"FULL_TIME");
+        this.salary = 0;
+        this.leavedays=0;
+    }
+
     public void setSalary(float salary) {
         this.salary = salary;
     }
@@ -22,6 +28,11 @@ public class FullTimeEmployee extends Employee{
         return salary-((salary/30)*leavedays);
     }
 
-
+    public int getLeavedays(){
+        return leavedays;
+    }
+    public void setLeavedays(int days){
+        this.leavedays=days;
+    }
 
 }

@@ -7,6 +7,11 @@ public class PartTimeEmployee extends Employee {
         this.hrsworked = hrsworked;
         this.hourlyrate = hourlyrate;
     }
+    public PartTimeEmployee(){
+        super(null,null,null,"PART_TIME");
+        this.hrsworked = 0.0f;
+        this.hourlyrate = 0.0f;
+    }
 
     public void setHrsworked(float hrsworked) {
         this.hrsworked = hrsworked;
