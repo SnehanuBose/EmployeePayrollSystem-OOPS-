@@ -8,5 +8,8 @@ A payroll management system is a software tool designed to automate and streamli
 2. Delete the details of the employee when he/she leaves the company
 3. Display all the employee list
 
+## NOTE
+Use your own databse url,username and password to store the data. Initialize your own value of the url,username and password in the PayrollSystem.java file.
+
 ## Disclaimer
 Need to work on the Update feature and make some more changes to make it better :sweat_smile: Will do it within a few days . If anyone wants to improve this system then you are welcome to do so and also a heartful thanks for your contribution in advance :smile: .
