@@ -11,7 +11,7 @@ A payroll management system is a software tool designed to automate and streamli
 ### How to connect to Postgresql db using jdbc?
 Step 1: Download the postgressql jdbc driver (.jar file) from the link https://jdbc.postgresql.org/
 Step 2: Go to Project Structures and then to Libraries
-Step 3: Select the .jar file you just downloaded
+Step 3: Select the .jar file you just downloaded and then run the connectDb method in PayrollSystem class
 
 ## NOTE
 Use your own databse url,username and password to store the data. Initialize your own value of the url,username and password in the PayrollSystem.java file.
