@@ -42,7 +42,7 @@ abstract class Employee {
         this.email = email;
     }
 
-    public abstract float calculateSalary();
+    protected abstract float calculateSalary();
 
     @Override
     public String toString() {

@@ -28,7 +28,8 @@ public class PartTimeEmployee extends Employee {
         return hourlyrate;
     }
 
-    public float calculateSalary() {
+    @Override
+    protected float calculateSalary() {
         return hrsworked * hourlyrate;
     }
 

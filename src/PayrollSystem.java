@@ -1,3 +1,4 @@
+import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -69,8 +70,98 @@ public class PayrollSystem {
     }
 
     //Update -- TODO
-    public void updateDetails(){
-        //will do later
+    public void updateDetails(float salary,String etype,int id){
+        //update the salary based on employee id
+        Statement statement;
+        try{
+            String query = null;
+            Connection conn=connectDb();
+            if(etype.equals("FULL_TIME")){
+                query = "UPDATE full_time_employee SET salary = '"+salary+"' WHERE empid ='"+id+"'";
+                statement = conn.createStatement();
+                statement.executeUpdate(query);
+            }else if(etype.equals("PART_TIME")){
+                query = "UPDATE part_time_employee SET salary = '"+salary+"' WHERE empid ='"+id+"'";
+                statement = conn.createStatement();
+                statement.executeUpdate(query);
+
+            }else{
+                System.out.println("Invalid Employee Type");
+            }
+
+
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void updateDetails(float salary,String etype,String name){
+        //update salary based on name of employee
+        Statement statement;
+        try{
+            String query = null;
+            Connection conn=connectDb();
+            if(etype.equals("FULL_TIME")){
+                query = "UPDATE full_time_employee SET salary = '"+salary+"' WHERE empname ='"+name+"'";
+                statement = conn.createStatement();
+                statement.executeUpdate(query);
+            }else if(etype.equals("PART_TIME")){
+                query = "UPDATE part_time_employee SET salary = '"+salary+"' WHERE empname ='"+name+"'";
+                statement = conn.createStatement();
+                statement.executeUpdate(query);
+
+            }else{
+                System.out.println("Invalid Employee Type");
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void updateLeaves(int id){
+        //update leaves for employee based on id
+        Statement statement;
+        try{
+            String query = null;
+            Connection conn=connectDb();
+            query = "UPDATE full_time_employee SET leaves = leaves + 1 WHERE empid ='"+id+"'";
+            statement = conn.createStatement();
+            statement.executeUpdate(query);
+
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void updateLeaves(int id,int leave){
+        //update leaves for employee based on id
+        Statement statement;
+        try{
+            String query = null;
+            Connection conn=connectDb();
+            query = "UPDATE full_time_employee SET leaves = leaves + "+leave+" WHERE empid ='"+id+"'";
+            statement = conn.createStatement();
+            statement.executeUpdate(query);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void resetLeaves(){//reset the leaves of all the employees
+        Statement statement;
+        try{
+            Connection conn=connectDb();
+            String query=null;
+            int count=0;
+            count=getlength("FULL_TIME");
+            for(int i =1;i<=count;i++){
+                query = "UPDATE full_time_employee SET leaves = 0 WHERE empid ='"+i+"'";
+                statement=conn.createStatement();
+                statement.executeUpdate(query);
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
 
     //Remove
@@ -112,7 +203,8 @@ public class PayrollSystem {
         }
     }
 
-    public void getEmployees(int ch){ //get the list of employees from the table and display it
+    //get details
+    public void getEmployeeDetails(int ch){ //get the list of employees from the table and display it
         //ch- 1 for full time
         //ch- 2 for part time
         //ch- 3 for both -- need to work on it
@@ -135,9 +227,141 @@ public class PayrollSystem {
                         ftemp.setLeavedays(Integer.parseInt(rs.getString("leaves")));
                         employeeList.add(ftemp);
                     }
+                    display();
                     break;
                 case 2:
                     query="SELECT * FROM part_time_employee;";
+                    statement=conn.createStatement();
+                    rs=statement.executeQuery(query);
+                    while(rs.next()){
+                        PartTimeEmployee ptemp=new PartTimeEmployee();
+                        ptemp.setId(rs.getString("empid"));
+                        ptemp.setName(rs.getString("empname"));
+                        ptemp.setEmail(rs.getString("empemail"));
+                        ptemp.setHourlyrate(Float.parseFloat(rs.getString("ratephr")));
+                        ptemp.setHrsworked(Float.parseFloat(rs.getString("workhours")));
+                        employeeList.add(ptemp);
+                    }
+                    display();
+                    break;
+                case 3:
+                    System.out.println("FULL TIME EMPLOYEE LIST");
+                    query="SELECT * FROM full_time_employee;";
+                    statement=conn.createStatement();
+                    rs=statement.executeQuery(query);
+                    while(rs.next()){
+                        FullTimeEmployee ftemp=new FullTimeEmployee();
+                        ftemp.setId(rs.getString("empid"));
+                        ftemp.setName(rs.getString("empname"));
+                        ftemp.setEmail(rs.getString("empemail"));
+                        ftemp.setSalary(Float.parseFloat(rs.getString("salary")));
+                        ftemp.setLeavedays(Integer.parseInt(rs.getString("leaves")));
+                        employeeList.add(ftemp);
+                    }
+                    display();
+                    employeeList.clear();
+                    System.out.println("PART TIME EMPLOYEE LIST");
+                    query="SELECT * FROM part_time_employee;";
+                    statement=conn.createStatement();
+                    rs=statement.executeQuery(query);
+                    while(rs.next()){
+                        PartTimeEmployee ptemp=new PartTimeEmployee();
+                        ptemp.setId(rs.getString("empid"));
+                        ptemp.setName(rs.getString("empname"));
+                        ptemp.setEmail(rs.getString("empemail"));
+                        ptemp.setHourlyrate(Float.parseFloat(rs.getString("ratephr")));
+                        ptemp.setHrsworked(Float.parseFloat(rs.getString("workhours")));
+                        employeeList.add(ptemp);
+                    }
+                    display();
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+                    return;
+            }
+            conn.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    public void getEmployeeDetails(int ch,String name){ //get the  details of tnhe employee based on the name
+        //ch- 1 for full time
+        //ch- 2 for part time
+        //ch- 3 for both -- need to work on it
+        Statement statement;
+        try{
+            Connection conn= connectDb();
+            String query=null;
+            ResultSet rs=null;
+            switch(ch){
+                case 1:
+                    query="SELECT * FROM full_time_employee WHERE empname='"+name+"';";
+                    statement=conn.createStatement();
+                    rs=statement.executeQuery(query);
+                    while(rs.next()){
+                        FullTimeEmployee ftemp=new FullTimeEmployee();
+                        ftemp.setId(rs.getString("empid"));
+                        ftemp.setName(rs.getString("empname"));
+                        ftemp.setEmail(rs.getString("empemail"));
+                        ftemp.setSalary(Float.parseFloat(rs.getString("salary")));
+                        ftemp.setLeavedays(Integer.parseInt(rs.getString("leaves")));
+                        employeeList.add(ftemp);
+                    }
+                    break;
+                case 2:
+                    query="SELECT * FROM part_time_employee WHERE empname='"+name+"';";
+                    statement=conn.createStatement();
+                    rs=statement.executeQuery(query);
+                    while(rs.next()){
+                        PartTimeEmployee ptemp=new PartTimeEmployee();
+                        ptemp.setId(rs.getString("empid"));
+                        ptemp.setName(rs.getString("empname"));
+                        ptemp.setEmail(rs.getString("empemail"));
+                        ptemp.setHourlyrate(Float.parseFloat(rs.getString("ratephr")));
+                        ptemp.setHrsworked(Float.parseFloat(rs.getString("workhours")));
+                        employeeList.add(ptemp);
+                    }
+                    break;
+                case 3:
+                    //will do later
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+                    return;
+            }
+            conn.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        display();
+    }
+
+    public void getEmployeeDetails(int ch,int id){ //get the details of a particular employee based on the id
+        //ch- 1 for full time
+        //ch- 2 for part time
+        //ch- 3 for both -- need to work on it
+        Statement statement;
+        try{
+            Connection conn= connectDb();
+            String query=null;
+            ResultSet rs=null;
+            switch(ch){
+                case 1:
+                    query="SELECT * FROM full_time_employee WHERE empid='"+id+"';";
+                    statement=conn.createStatement();
+                    rs=statement.executeQuery(query);
+                    while(rs.next()){
+                        FullTimeEmployee ftemp=new FullTimeEmployee();
+                        ftemp.setId(rs.getString("empid"));
+                        ftemp.setName(rs.getString("empname"));
+                        ftemp.setEmail(rs.getString("empemail"));
+                        ftemp.setSalary(Float.parseFloat(rs.getString("salary")));
+                        ftemp.setLeavedays(Integer.parseInt(rs.getString("leaves")));
+                        employeeList.add(ftemp);
+                    }
+                    break;
+                case 2:
+                    query="SELECT * FROM part_time_employee WHERE empid='"+id+"';";
                     statement=conn.createStatement();
                     rs=statement.executeQuery(query);
                     while(rs.next()){
@@ -250,9 +474,33 @@ public class PayrollSystem {
     }
 
     //Display
-    public void display(){//to display the employees in the list
+    private void display(){//to display the employees in the list
         for(Employee employee : employeeList){
             System.out.println(employee.toString());
         }
+    }
+
+    private int getlength(String etype){//return the length of the table
+        Statement statement;
+        try{
+            Connection conn=connectDb();
+            if(etype.equals("FULL_TIME")){
+                String query="SELECT COUNT(*) as rowscount FROM full_time_employee;";
+                statement=conn.createStatement();
+                ResultSet rs=statement.executeQuery(query);
+                rs.next();
+                return rs.getInt("rowscount");
+            }else if(etype.equals("PART_TIME")){
+                String query="SELECT COUNT(*) as rowscount FROM part_time_employee;";
+                statement=conn.createStatement();
+                ResultSet rs=statement.executeQuery(query);
+                rs.next();
+                return rs.getInt("rowscount");
+            }
+
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return -1;
     }
 }

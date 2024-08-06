@@ -24,8 +24,8 @@ public class FullTimeEmployee extends Employee{
     }
 
     @Override
-    public float calculateSalary() {
-        return salary-((salary/30)*leavedays);
+    protected float calculateSalary() {
+        return getLeavedays()>3? salary-((salary/30)*(getLeavedays()-3)):salary;
     }
 
     public int getLeavedays(){
