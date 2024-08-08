@@ -6,7 +6,8 @@ A payroll management system is a software tool designed to automate and streamli
 ### What does it do?
 1. Add details of an employee
 2. Delete the details of the employee when he/she leaves the company
-3. Display all the employee list
+3. Display all the employee list and also displya the details of an particular employee
+4. Increase the number of leaves taken by an emoloyee and also reset the value.
 
 ### How to connect to Postgresql db using jdbc?
 Step 1: Download the postgressql jdbc driver (.jar file) from the link https://jdbc.postgresql.org/
